@@ -1,0 +1,110 @@
+﻿<Window x:Class="Game2048.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="2048" Height="550" Width="450" KeyDown="Window_KeyDown">
+    <Window.Resources>
+        <Storyboard x:Key="FadeInAnimation">
+            <DoubleAnimation From="0" To="1" Duration="0:0:0.1" 
+                         Storyboard.TargetProperty="Opacity" />
+        </Storyboard>
+
+        <Storyboard x:Key="SoftAnimation">
+            <DoubleAnimation From="1" To="1.1" Duration="0:0:0.7"
+                         Storyboard.TargetProperty="LayoutTransform.ScaleX" 
+                         AutoReverse="True" RepeatBehavior="Forever" />
+            <DoubleAnimation From="1" To="1.1" Duration="0:0:0.7"
+                         Storyboard.TargetProperty="LayoutTransform.ScaleY" 
+                         AutoReverse="True" RepeatBehavior="Forever" />
+        </Storyboard>
+        
+        <Storyboard x:Key="MergeAnimation">
+            <DoubleAnimation From="1" To="0.5" Duration="0:0:0.2"
+                     Storyboard.TargetProperty="Opacity" />
+            <DoubleAnimation From="1" To="1.5" Duration="0:0:0.2"
+                     Storyboard.TargetProperty="LayoutTransform.ScaleX" />
+            <DoubleAnimation From="1" To="1.5" Duration="0:0:0.2"
+                     Storyboard.TargetProperty="LayoutTransform.ScaleY" />
+            <DoubleAnimation From="0.5" To="1" Duration="0:0:0.2" BeginTime="0:0:0.2"
+                     Storyboard.TargetProperty="Opacity" />
+            <DoubleAnimation From="1.5" To="1" Duration="0:0:0.2" BeginTime="0:0:0.2"
+                     Storyboard.TargetProperty="LayoutTransform.ScaleX" />
+            <DoubleAnimation From="1.5" To="1" Duration="0:0:0.2" BeginTime="0:0:0.2"
+                     Storyboard.TargetProperty="LayoutTransform.ScaleY" />
+        </Storyboard>
+
+        <Style TargetType="Border">
+            <Setter Property="Background" Value="Gray" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Opacity" Value="0" />
+            <Setter Property="LayoutTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                    <BeginStoryboard Storyboard="{StaticResource SoftAnimation}" />
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseDown">
+                    <BeginStoryboard Storyboard="{StaticResource MergeAnimation}" />
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+        
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- This is the game board -->
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="4"
+            BorderThickness="2" BorderBrush="Black">
+            <UniformGrid Rows="6" Columns="6" Name="gameBoard">
+                <UniformGrid.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="Gray" />
+                        <Setter Property="BorderThickness" Value="2" />
+                        <Setter Property="BorderBrush" Value="Black" />
+                        <Setter Property="CornerRadius" Value="10" />
+                        <Setter Property="Opacity" Value="0" />
+                        <Setter Property="LayoutTransform">
+                            <Setter.Value>
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                                <BeginStoryboard Storyboard="{StaticResource SoftAnimation}" />
+                            </EventTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </UniformGrid.Resources>
+            </UniformGrid>
+        </Border>
+
+        <!-- This is the game score -->
+        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" 
+               TextAlignment="Center" FontSize="30" FontWeight="Bold" 
+               Name="scoreText" Margin="10,20">Score: 0</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" 
+               TextAlignment="Center" FontSize="30" FontWeight="Bold" 
+               Name="timerText" Margin="10,20">Time: 0</TextBlock>
+    </Grid>
+</Window>
